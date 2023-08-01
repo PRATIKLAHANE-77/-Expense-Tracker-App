@@ -18,10 +18,10 @@ document
     localStorage.setItem(uid, JSON.stringify(obj));
     const newli = document.createElement("li");
     newli.id = "newli";
-    newli.textContent = localStorage.getItem(uid);
+    newli.textContent = JSON.stringify(obj);
     const deletebtn = document.createElement("button");
     deletebtn.id = "delete-btn";
-    deletebtn.className = "btn btn-danger btn-lg";
+    deletebtn.className = "btn btn-danger btn-lg";   
     deletebtn.textContent = "Delete";
     newli.appendChild(deletebtn);
     const Editbtn = document.createElement("button");
