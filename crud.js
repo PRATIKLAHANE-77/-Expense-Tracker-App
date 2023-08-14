@@ -11,14 +11,23 @@ document
       category: category,
       description: description,
     };
-    let uid =
-      JSON.stringify(amount) +
-      JSON.stringify(category) +
-      JSON.stringify(description);
-    localStorage.setItem(uid, JSON.stringify(obj));
+    // let uid =
+    //   JSON.stringify(amount) +
+    //   JSON.stringify(category) +
+    //   JSON.stringify(description);
+
+      axios.post("https://crudcrud.com/api/48854ad230894cc6b330754f75016182/Info",obj).then((response)=>{
+        console.log(response)
+        //  call display funtion here....
+
+
+      }).catch((err)=>{
+        console.log(err);
+      })
+    // localStorage.setItem(uid, JSON.stringify(obj));   // we dont neee this,
     const newli = document.createElement("li");
     newli.id = "newli";
-    newli.textContent = localStorage.getItem(uid);
+    newli.textContent = amount + category + description ;
     const deletebtn = document.createElement("button");
     deletebtn.id = "delete-btn";
     deletebtn.className = "btn btn-danger btn-lg";
@@ -33,7 +42,7 @@ document
     // delete functionality
     deletebtn.addEventListener("click", function deleteInfo(event) {
       event.preventDefault();
-      localStorage.removeItem(); /// how it work
+      localStorage.removeItem(uid); /// how it work
       mainlist.removeChild(deletebtn.parentElement);
     });
     Editbtn.addEventListener("click", function editInfo(event) {

@@ -21,7 +21,9 @@
   <body>
     <div class="container">
       <form>
-        <h1 id="h1"><center><strong>EXPENSE TRACKER</strong></center></h1>
+        <h1 id="h1">
+          <center><strong>EXPENSE TRACKER</strong></center>
+        </h1>
         <br /><br />
         <label for="choose expence amount" class="form-label"
           ><strong>Expence Amount</strong></label
@@ -32,7 +34,10 @@
         >
         <input type="text" id="category" class="form-control" /> -->
         <select
-          class="form-select" id="category" aria-label="Default select example">
+          class="form-select"
+          id="category"
+          aria-label="Default select example"
+        >
           <option selected>Movie</option>
           <option value="Web Series">Web Series</option>
           <option value="Cartoons">Cartoons</option>
@@ -43,15 +48,15 @@
         >
         <input type="text" id="description" class="form-control" /><br />
         <center>
-          <button class="btn btn-outline-success btn-lg" id="submit-btn">ADD EXPENCES</button>
+          <button class="btn btn-outline-success btn-lg" id="submit-btn">
+            ADD EXPENCES
+          </button>
         </center>
         <br />
         <!-- <li id="list"></li> -->
         <ol id="list"></ol>
-        <!-- <button class="btn btn-danger" id="delete-btn" >Delete Info</button>
-        <button class="btn btn-warning" id="edit-btn" >Edit Info</button> -->
-
-        <script src="new.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.4.0/axios.min.js"></script>
+        <script src="crud.js"></script>
       </form>
     </div>
   </body>
