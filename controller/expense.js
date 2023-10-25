@@ -1,5 +1,7 @@
 const { where } = require("sequelize");
 const expense = require("../model/expense");
+const USER = require("../model/user");
+const { use } = require("../routes/user");
 
 exports.addexpense = (req, res) => {
   const { amount, description, category } = req.body;
@@ -33,10 +35,24 @@ exports.getallexpenses = (req, res) => {
     .findAll({ where: { userId: user.id } })
     .then((userData) => {
       console.log(userData);
-      res.status(200).json(userData);
+      res.status(200).json({userData});
     })
     .catch((error) => {
       console.error("Error fetching data:", error);
       res.status(500).send("Internal Server Error");
     });
 };
+
+// exports.getallexpenses = async (req, res) => {
+//   const user = req.user;
+//   // console.log("value of user is = ", user.id);
+//   const Usercheck =  await USER.findOne({where:{id:user.id}});
+//   // console.log("IS PRIME CHECK = ", Usercheck.ispremiumuser);
+//   const Expense =  await  expense.findAll({ where: { userId: user.id } });
+//     await Promise.all([Usercheck, Expense])
+//       const ispremiumuser = Usercheck.ispremiumuser;
+//      console.log("IS PRIME CHECK = ", Usercheck.ispremiumuser);
+//      console.log("expense = ", Expense);
+//       res.status(200).json({ispremiumuser:ispremiumuser, expense:Expense})
+  
+// };

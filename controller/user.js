@@ -35,9 +35,9 @@ exports.signup = async (req, res) => {
   }
 };
 
-function generateAccessToken(id) {
+function generateAccessToken(id, premium) {
   // return (accessToken = jwt.sign({ id }, "secretkey"));
-  return jwt.sign({ userId: id }, "secretkey");
+  return jwt.sign({ userId: id,premium }, "secretkey");
 }
 
 // exports.signin = async (req, res) => {
@@ -61,13 +61,25 @@ function generateAccessToken(id) {
 //       if (err || !result) {
 //         return res.status(401).json("Invalid password");
 //       }
+//       const check = existingUser.ispremiumuser;
+//       console.log("value of isprime = ", check);
+
+//       if (check === null) {
+//         res
+//           .status(200)
+//           .json({ isprime: 0, token: generateAccessToken(existingUser.id) });
+//       } else {
+//         res
+//           .status(200)
+//           .json({ isprime: 1, token: generateAccessToken(existingUser.id) });
+//       }
 //       // res.status(200).json(existingUser.id);
-//       res.status(200).json({ token: generateAccessToken(existingUser.id) });
 //     });
 //   } catch (error) {
 //     res.status(500).json("Error signing in");
 //   }
 // };
+
 
 exports.signin = async (req, res) => {
   const { Email, Password } = req.body;
@@ -93,15 +105,7 @@ exports.signin = async (req, res) => {
       const check = existingUser.ispremiumuser;
       console.log("value of isprime = ", check);
 
-      if (check === null) {
-        res
-          .status(200)
-          .json({ isprime: 0, token: generateAccessToken(existingUser.id) });
-      } else {
-        res
-          .status(200)
-          .json({ isprime: 1, token: generateAccessToken(existingUser.id) });
-      }
+      res.status(200).json({token: generateAccessToken(existingUser.id,check) });
       // res.status(200).json(existingUser.id);
     });
   } catch (error) {

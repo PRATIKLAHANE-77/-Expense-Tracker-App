@@ -4,6 +4,7 @@ const sequelize = require("./util/SDatabase");
 const userRoute = require("./routes/user");
 const expenseRoute = require("./routes/expense");
 const purchaseRoute = require("./routes/purchase");
+const premiumRoute = require("./routes/premium");
 const expense = require("./model/expense");
 const user = require("./model/user");
 const Order = require("./model/order");
@@ -20,6 +21,7 @@ expense.belongsTo(user, { foreignKey: "userId" }); // An expense belongs to one 
 app.use("/user", userRoute);
 app.use("/expense", expenseRoute);
 app.use("/purchase",purchaseRoute);
+app.use("/premium",premiumRoute);
 
 user.hasMany(Order);
 Order.belongsTo(user);

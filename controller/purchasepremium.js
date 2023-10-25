@@ -1,5 +1,7 @@
 const Razorpay = require("razorpay");
 const Order = require("../model/order");
+const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken"); // Import JWT for generating tokens
 require("dotenv").config();
 
 exports.purchasepremium = async (req, res) => {
@@ -41,6 +43,10 @@ exports.purchasepremium = async (req, res) => {
   }
 };
 
+function generateAccessToken(id, premium) {
+  return jwt.sign({ userId: id,premium }, "secretkey");
+}
+
 exports.updatetransactionstatus = async (req, res) => {
   try {
     const { order_id, payment_id } = req.body;
@@ -49,9 +55,12 @@ exports.updatetransactionstatus = async (req, res) => {
     const promise1 =  order.update({ paymentid: payment_id, status: "successful" });
     const promise2 =  user.update({ ispremiumuser: true });
     await Promise.all([promise1, promise2]).then(()=>{
-        return res
+      console.log("id and ststuas = ", user.id, user.ispremiumuser);
+      const abc = generateAccessToken(user.id, user.ispremiumuser);
+
+       return res
       .status(202)
-      .json({ success: true, message: "transaction done successfully" }); 
+      .json({ abc }); 
     }).catch((err)=>{
        throw new Error(err);
  

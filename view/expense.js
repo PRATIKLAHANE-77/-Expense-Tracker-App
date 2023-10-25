@@ -1,3 +1,5 @@
+// const { response } = require("express");
+
 const mainlist = document.getElementById("mainlist");
 const token = localStorage.getItem("token");
 
@@ -45,7 +47,10 @@ function showAllExpenses() {
       headers: { Authorization: token },
     })
     .then((response) => {
-      const ans = response.data.forEach((data) => {
+        const h1 = document.createElement("h1");
+        h1.textContent = "Expenses";
+        mainlist.appendChild(h1);
+        const ans = response.data.userData.forEach((data) => {
         const { amount, description, category, id } = data;
         console.log("id, ", id);
         const li = document.createElement("li");
@@ -91,84 +96,124 @@ function delData(id, li) {
     });
 }
 
-// premium.addEventListener("click", (event) => {
-//   event.preventDefault();
-//   axios
-//     .get("http://localhost:5000/purchase/premiummembership", {
-//       headers: { Authorization: token },
-//     })
-//     .then((response) => {
-//       console.log(response.data);
-//       var options = {
-//         key: response.data.key_id,
-//         order_id: response.data.order.id,
-//         handler: async function (response) {
-//           await axios.post(
-//             "http://localhost:5000/purchase/updatetransactionstatus",
-//             {
-//               order_id: options.order_id,
-//               payment_id: response.razorpay_payment_id,
-//             },
-//             { headers: { Authorization: token } }
-//           );
-//           alert("you are a premium user now");
-//         },
-//       };
-//     })
-//     .catch((err) => {
-//       console.log(err);
-//     });
-// });
+const Decode = parseJwt(token);
 
-const isprime = localStorage.getItem("isprime");
-if(isprime == 0) {
+if (!Decode.premium) {
   const premium = document.getElementById("premium");
-premium.addEventListener("click", (event) => {
+  premium.addEventListener("click", (event) => {
+    event.preventDefault();
+    axios
+      .get("http://localhost:5000/purchase/premiummembership", {
+        headers: { Authorization: token },
+      })
+      .then((response) => {
+        console.log(response.data);
+        var options = {
+          key: response.data.key_id,
+          order_id: response.data.order.orderid,
+          handler: async function (response) {
+            if (response.razorpay_payment_id) {
+              // Payment succeeded
+             const Data =  await axios.post(
+                "http://localhost:5000/purchase/updatetransactionstatus",
+                {
+                  order_id: options.order_id,
+                  payment_id: response.razorpay_payment_id,
+                },
+                { headers: { Authorization: token } }
+              );
+              localStorage.setItem("token", Data.data.abc);
+              // console.log("lets check", Data.data.abc);
+              showAlert("Payment Success: You are a premium user now");
+              // document.body.removeChild(premium);
+              // const h5 = document.createElement("h5");
+              // h5.textContent = "You Are Premium User";
+              // document.body.appendChild(h5);
+              location.reload();
+            } else {
+              // Payment failed
+              showAlert("Payment Failed: Please try again.");
+            }
+          },
+        };
+
+        // Initialize the payment with Razorpay
+        var rzp = new Razorpay(options);
+
+        rzp.open();
+      })
+      .catch((err) => {
+        console.log(err);
+        showAlert("An error occurred. Please try again later.");
+      });
+  });
+
+  function showAlert(message) {
+    alert(message);
+  }
+}
+
+const leadershipbtn = document.getElementById("leader-btn");
+leadershipbtn.addEventListener("click",(event) =>{
   event.preventDefault();
-  axios
-    .get("http://localhost:5000/purchase/premiummembership", {
-      headers: { Authorization: token },
-    })
-    .then((response) => {
-      console.log(response.data);
-      var options = {
-        key: response.data.key_id,
-        order_id: response.data.order.orderid,
-        handler: async function (response) {
-          if (response.razorpay_payment_id) {
-            // Payment succeeded
-            await axios.post(
-              "http://localhost:5000/purchase/updatetransactionstatus",
-              {
-                order_id: options.order_id,
-                payment_id: response.razorpay_payment_id,
-              },
-              { headers: { Authorization: token } }
-            );
-            showAlert("Payment Success: You are a premium user now");
-            document.body.removeChild(premium);
-          } else {
-            // Payment failed
-            showAlert("Payment Failed: Please try again.");
-          }
-        },
-      };
+  const list = document.getElementById("list");
+  axios.get("http://localhost:5000/premium/showleaderboard", {
+    headers: { Authorization: token },
+  }).then((response)=>{
+    list.textContent = " ";
+    console.log(response.data);
+    const h1 = document.createElement("h1");
+  h1.textContent = "Leadership Board";
+  list.appendChild(h1);
+    for(let i = 0;i<response.data.length;i++) {
+      console.log(response.data[i]);
+      const li = document.createElement("li");
+      li.textContent = `Name: ${response.data[i].name}, Total Expenses = ${response.data[i].Total}`;
+      list.appendChild(li);
+    }
+  })
 
-      // Initialize the payment with Razorpay
-      var rzp = new Razorpay(options);
-
-      rzp.open();
-    })
-    .catch((err) => {
-      console.log(err);
-      showAlert("An error occurred. Please try again later.");
-    });
 });
 
-function showAlert(message) {
-  alert(message);
-}
 
 
-}
 
+
+// tring to solve after refreshing if block below code execute but it is not executing
+// async function showAllExpenses() {
+//   try {
+//     const response = await axios
+//     .get("http://localhost:5000/expense/getall", {
+//       headers: { Authorization: token },
+//     });
+//       const Decode = await parseJwt(token);
+//       if(Decode.premium) {
+//         console.log("entered in if condition");
+//         const premium = document.getElementById("premium");
+//         document.body.removeChild(premium);
+//         const h5 = document.createElement("h5");
+//         h5.textContent = "You Are Premium User";
+//         document.body.appendChild(h5);
+//       }
+//       console.log("refresh page data, ", response.data);
+
+//       for (const data of response.data.expense) {
+//         const { amount, description, category, id } = data;
+//         console.log("id: ", id);
+//         const li = document.createElement("li");
+//         const deldata = document.createElement("button");
+//         deldata.textContent = "DELETE";
+//         li.textContent = `Amount: ${amount} Description: ${description} Category: ${category}`;
+//         li.appendChild(deldata);
+//         mainlist.appendChild(li);
+
+//         // Use await for asynchronous operation
+//         await delData(id, li);
+//       }
+
+//   }
+//   catch(err) {
+//     const li = document.createElement("li");
+//     li.textContent = `Something went wrong`;
+//   };
+// }
