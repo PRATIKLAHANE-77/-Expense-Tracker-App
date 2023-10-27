@@ -21,16 +21,35 @@ addExpense.addEventListener("click", (event) => {
   postdata(obj);
 });
 
+// without transaction
+// function postdata(param) {
+//   axios
+//     .post("http://localhost:5000/expense/addexpense", param, {
+//       headers: { Authorization: token },
+//     })
+//     .then((response) => {
+//       const li = document.createElement("li");
+//       const deldata = document.createElement("button");
+//       deldata.textContent = "DELETE";
+//       const { amount, description, category } = response.data;
+//       li.textContent = `Amount: ${amount} Description: ${description} Category: ${category}`;
+//       li.appendChild(deldata);
+//       mainlist.appendChild(li);
+//     });
+// }
+
+// With transaction
 function postdata(param) {
   axios
     .post("http://localhost:5000/expense/addexpense", param, {
       headers: { Authorization: token },
     })
     .then((response) => {
+      // console.log(response.data);
       const li = document.createElement("li");
       const deldata = document.createElement("button");
       deldata.textContent = "DELETE";
-      const { amount, description, category } = response.data;
+      const { amount, description, category } = response.data.expense;
       li.textContent = `Amount: ${amount} Description: ${description} Category: ${category}`;
       li.appendChild(deldata);
       mainlist.appendChild(li);
