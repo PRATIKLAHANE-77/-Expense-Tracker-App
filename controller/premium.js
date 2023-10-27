@@ -74,28 +74,50 @@ const sequelize = require("../util/SDatabase");
 
 // two step best from above
 
-exports.showleaderboard = async (req, res) => {
-  try {
-    const userAggregatedExpenses = await user.findAll({
-      attributes: [
-        "name",
-        "id",
-        [sequelize.fn("sum", sequelize.col("amount")), "total_cost"],
-      ],
-      include: [
-        {
-          model: expense,
-          attributes: [],
-        },
-      ],
-      group: ["id"],
-      order: [[sequelize.col("total_cost"), "DESC"]],
-    });
+// exports.showleaderboard = async (req, res) => {
+//   try {
+//     const userAggregatedExpenses = await user.findAll({
+//       attributes: [
+//         "name",
+//         "id",
+//         [sequelize.fn("sum", sequelize.col("amount")), "total_cost"],
+//       ],
+//       include: [
+//         {
+//           model: expense,
+//           attributes: [],
+//         },
+//       ],
+//       group: ["id"],
+//       order: [[sequelize.col("total_cost"), "DESC"]],
+//     });
 
-    res.status(200).json(userAggregatedExpenses);
-    console.log(userAggregatedExpenses);
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: "An error occurred while fetching data" });
-  }
-};
+//     res.status(200).json(userAggregatedExpenses);
+//     console.log(userAggregatedExpenses);
+//   } catch (error) {
+//     console.error(error);
+//     res.status(500).json({ error: "An error occurred while fetching data" });
+//   }
+// };
+
+
+
+/// last optimal solution
+
+exports.showleaderboard = async (req,res) =>{
+  const id = req.user.id;
+console.log("check", req.user.id);
+user.findOne({where:{id:id}}).then((data) =>{
+  res.status(200).json({"Name" : data.name, "Total": data.Total});
+  console.log("data", data);
+
+})
+
+
+
+
+
+}
+
+
+

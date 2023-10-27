@@ -153,7 +153,7 @@ if (!Decode.premium) {
   }
 }
 
-const leadershipbtn = document.getElementById("leader-btn");
+// const leadershipbtn = document.getElementById("leader-btn");
 // leadershipbtn.addEventListener("click",(event) =>{
 //   event.preventDefault();
 //   const list = document.getElementById("list");
@@ -175,6 +175,35 @@ const leadershipbtn = document.getElementById("leader-btn");
 
 // });
 
+// if(Decode.premium) {
+//   const leadershipbtn = document.getElementById("leader-btn");
+// leadershipbtn.addEventListener("click", (event) => {
+//   event.preventDefault();
+//   const list = document.getElementById("list");
+//   axios
+//     .get("http://localhost:5000/premium/showleaderboard", {
+//       headers: { Authorization: token },
+//     })
+//     .then((response) => {
+//       console.log(response.data);
+//       list.textContent = " ";
+//       const h1 = document.createElement("h1");
+//       h1.textContent = "Leadership Board";
+//       list.appendChild(h1);
+//       for (let i = 0; i < response.data.length; i++) {
+//         console.log(response.data[i]);
+//         const li = document.createElement("li");
+//         li.textContent = `Name: ${response.data[i].name}, Total Expenses = ${response.data[i].total_cost}`;
+//         list.appendChild(li);
+//       }
+//     });
+// });
+// }
+
+// most efficient code
+
+if(Decode.premium) {
+  const leadershipbtn = document.getElementById("leader-btn");
 leadershipbtn.addEventListener("click", (event) => {
   event.preventDefault();
   const list = document.getElementById("list");
@@ -188,50 +217,10 @@ leadershipbtn.addEventListener("click", (event) => {
       const h1 = document.createElement("h1");
       h1.textContent = "Leadership Board";
       list.appendChild(h1);
-      for (let i = 0; i < response.data.length; i++) {
-        console.log(response.data[i]);
         const li = document.createElement("li");
-        li.textContent = `Name: ${response.data[i].name}, Total Expenses = ${response.data[i].total_cost}`;
+        li.textContent = `Name: ${response.data.Name}, Total Expenses = ${response.data.Total}`;
         list.appendChild(li);
-      }
+    
     });
 });
-
-// tring to solve after refreshing if block below code execute but it is not executing
-// async function showAllExpenses() {
-//   try {
-//     const response = await axios
-//     .get("http://localhost:5000/expense/getall", {
-//       headers: { Authorization: token },
-//     });
-//       const Decode = await parseJwt(token);
-//       if(Decode.premium) {
-//         console.log("entered in if condition");
-//         const premium = document.getElementById("premium");
-//         document.body.removeChild(premium);
-//         const h5 = document.createElement("h5");
-//         h5.textContent = "You Are Premium User";
-//         document.body.appendChild(h5);
-//       }
-//       console.log("refresh page data, ", response.data);
-
-//       for (const data of response.data.expense) {
-//         const { amount, description, category, id } = data;
-//         console.log("id: ", id);
-//         const li = document.createElement("li");
-//         const deldata = document.createElement("button");
-//         deldata.textContent = "DELETE";
-//         li.textContent = `Amount: ${amount} Description: ${description} Category: ${category}`;
-//         li.appendChild(deldata);
-//         mainlist.appendChild(li);
-
-//         // Use await for asynchronous operation
-//         await delData(id, li);
-//       }
-
-//   }
-//   catch(err) {
-//     const li = document.createElement("li");
-//     li.textContent = `Something went wrong`;
-//   };
-// }
+}

@@ -2,12 +2,15 @@ const { where } = require("sequelize");
 const expense = require("../model/expense");
 const USER = require("../model/user");
 const { use } = require("../routes/user");
-
-exports.addexpense = (req, res) => {
+exports.addexpense = async (req, res) => {
   const { amount, description, category } = req.body;
+  const totalexpense = Number(req.user.Total) + Number(amount);
   const user = req.user;
   // console.log("final ans ", user);
   const userId = user.id;
+  await USER.update({ Total: totalexpense }, {
+    where: { id: userId } // Specify the user to update based on their ID
+  });
   const newUser = expense.create({
     amount,
     description,
