@@ -35,3 +35,10 @@ Signup.addEventListener("click", (event) => {
   event.preventDefault();
   window.location.href = "signup.html";
 });
+
+const forgotpassword = document.getElementById("forgotpass")
+forgotpassword.addEventListener("click",(event) =>{
+  event.preventDefault();
+  window.location.href = "forgotpassword.html";
+
+})
