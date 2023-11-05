@@ -8,6 +8,8 @@ router.post("/addexpense",userauthenticate.authenticate, expensecontroller.addex
 router.get("/getall",userauthenticate.authenticate ,expensecontroller.getallexpenses);
 // router.delete("/deldata", userauthenticate.authenticate, expensecontroller.deleteExpenses);
 router.delete("/deldata/:id", userauthenticate.authenticate, expensecontroller.deleteExpenses);
+router.get('/get-expenses', userauthenticate.authenticate,expensecontroller.getExpenses)
+
 
 
 module.exports = router;

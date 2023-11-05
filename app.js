@@ -9,14 +9,16 @@ const forgotpassRoute = require("./routes/forgotpass");
 const expense = require("./model/expense");
 const user = require("./model/user");
 const Order = require("./model/order");
+const forgotpassword = require("./model/forgotpassword");
 const cors = require("cors"); 
 
 app.use(express.json({ extended: true }));
+app.use(express.urlencoded({ extended: true }));
+
 
 app.use(cors());
 
-user.hasMany(expense, { foreignKey: "userId" }); // User can have many expenses
-expense.belongsTo(user, { foreignKey: "userId" }); // An expense belongs to one user
+
 
 
 app.use("/user", userRoute);
@@ -26,10 +28,18 @@ app.use("/premium",premiumRoute);
 app.use("/password",forgotpassRoute);
 
 
-
+user.hasMany(expense, { foreignKey: "userId" }); // User can have many expenses
+expense.belongsTo(user, { foreignKey: "userId" }); // An expense belongs to one user
 
 user.hasMany(Order);
 Order.belongsTo(user);
+
+user.hasMany(forgotpassword);
+forgotpassword.belongsTo(user);
+
+
+
+
 
 
 sequelize
